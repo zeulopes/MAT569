@@ -1,0 +1,10 @@
+
+#ignorando os .class do projeto
+.class
+.classpath
+.DS_Store
+.project
+
+.recommenders/
+.metadata/
+.settings/
