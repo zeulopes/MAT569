@@ -23,6 +23,10 @@ import tolerancia.falhas.host.Host;
  * - o módulo monitor está presente em todas as replicas
  * - implementar por camadas
  * 
+ * 
+ * - fazer um modulo monitor onde será responsavel por criar todas as replicas da rede
+ * - Enviar um objeto via socket
+ * - timeout adaptativo iniciar com zero e a depender do tempo inicial e da quantidade de replicas assumir um tempo medio de envio
  */
 class Service {
 	public static void main(String args[]) throws Exception {
@@ -30,7 +34,8 @@ class Service {
 		Host host;
 		String frase = null;
 		//definindo o endereco do grupo
-        InetAddress group = InetAddress.getByName("239.0.0.1");
+//      InetAddress group = InetAddress.getByName("239.0.0.1");
+		InetAddress group = InetAddress.getByName("localhost");
         String folder = "server_";			
 		//inicianado a pasta do server
 		File folderServer;
@@ -44,7 +49,7 @@ class Service {
 			int id = Integer.valueOf(new BufferedReader(new InputStreamReader(System.in)).readLine());
 			host = new Host(id, true);
 			System.out.println("Servidor: " + host.getId() + " Criado com Sucesso, na porta: " + host.getPort());
-			frase = "ACK - Servidor " + host.getId() + "entrando no grupo";
+			frase = "ACK - Servidor " + host.getId() + " entrando no grupo";
 		} else {
 			System.out.println("Cliente Criado com Sucesso. ");
 			System.out.print("Informe a mensagem a ser gravada: ");
@@ -65,7 +70,7 @@ class Service {
 		
 		if(host.isType()){
 			host.getSocket().setSoTimeout(5000);
-//			host.getSocket().joinGroup(group);
+///			host.getSocket().joinGroup(group);
 			folder += host.getId();			
 			folderServer = new File(folder);
 			folderServer.mkdir();
@@ -73,7 +78,6 @@ class Service {
 		}	
 		
 		while(true){
-		
 			try{
 				//inicializando o pacote a ser recebido
 				host.setReceivedPacket(new DatagramPacket(host.getBufferReceived(), host.getBufferReceived().length));                    
@@ -139,10 +143,6 @@ class Service {
 			//Enviando retorno do servidor
 			host.getSocket().send(host.getSendPacket());          
 		}
-	}
-	
-	private static void waitingPackage (Host host){
-		
 	}
 }
 

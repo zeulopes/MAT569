@@ -31,7 +31,7 @@ public class Host {
 	public int random(){
 		int random = (int) ((int) 1000 + Math.random() * 100);
 		
-		if (random != 1024 && random != 1013)
+		if (random != 1013 && random != 1022 && random != 1024)
 			return random;
 		else 
 			return random();

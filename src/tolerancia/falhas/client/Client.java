@@ -19,7 +19,7 @@ public class Client {
 		DatagramSocket socket = new DatagramSocket();
 
 		//Obtendo informações do cliente
-		InetAddress ip = InetAddress.getByName("localhost");       
+		InetAddress ip = InetAddress.getByName("239.0.0.1");       
 		
 		//array de bytes que ira armazenar os dados do pacote a ser enviado
 		byte[] enviado = new byte[1024];       
