@@ -8,3 +8,6 @@
 .recommenders/
 .metadata/
 .settings/
+.idea/*.xml
+.idea/copyright/*.xml
+MAT569.iml

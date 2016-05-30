@@ -3,7 +3,12 @@ package tolerancia.falhas.host;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 
 public class Host {
 	
@@ -12,6 +17,8 @@ public class Host {
 	byte[] bufferReceived, bufferSent;
 	boolean type, primaryBackup;
 	private MulticastSocket socket;
+	private ArrayList<Host> servers;
+	private ArrayList<Host> blackList;
 	
 	public Host(){}
 	
@@ -20,6 +27,9 @@ public class Host {
 		this.type = type;
 		this.bufferReceived = new byte [1024];
 		this.bufferSent = new byte[1024];
+		this.servers = new ArrayList<Host>();
+		this.blackList = new ArrayList<Host>();
+
 		try{
 			this.socket = new MulticastSocket(this.port = random());
 		} catch (BindException ex){
@@ -35,6 +45,14 @@ public class Host {
 			return random;
 		else 
 			return random();
+	}
+
+	public void voting() {
+		Collections.sort(this.servers, (Host h1, Host h2) -> (h1.getId() < h2.getId()) ? h1.getId() : h2.getId());
+		Host primary = this.servers.get(0);
+		primary.setPrimaryBackup(true);
+		this.servers.set(0, primary);
+		// TODO: enviar uma mensagem para os outros hosts
 	}
 	
 	public Integer getId() {
@@ -91,4 +109,8 @@ public class Host {
 	public void setSocket(MulticastSocket socket) {
 		this.socket = socket;
 	}
+	public void appendServer(Host host) { this.servers.add(host); }
+	public Host removeServer(int index) { return this.servers.remove(index); }
+	public void appendBlackList(Host host) { this.blackList.add(host); }
+	public Host removeBlackList(int index) { return this.blackList.remove(index); }
 }
